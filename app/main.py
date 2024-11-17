@@ -1,13 +1,11 @@
 #!/usr/bin/python3
+import mysql.connector
+from mysql.connector import Error
 
 from fastapi import FastAPI
 from typing import Optional
 from pydantic import BaseModel
 import json
-import os
-
-import mysql.connector
-from mysql.connector import Error
 import os
 
 app = FastAPI()
