@@ -26,6 +26,12 @@ DB = "cqb3tc"
 db = mysql.connector.connect(user=DBUSER, host=DBHOST, password=DBPASS, database=DB)
 cur=db.cursor()
 
+
+@app.get("/")
+def read_root():
+    return {"message": "Welcome to the API!"}
+
+
 @app.get('/genres')
 def get_genres():
     query = "SELECT * FROM genres ORDER BY genreid;"
@@ -58,16 +64,14 @@ def get_songs():
     """
 
     try:
-        cur = db.cursor(dictionary=True)  # Ensure consistent indentation
+        cur = db.cursor(dictionary=True)
         cur.execute(query)
         results = cur.fetchall()
 
-        # Initialize empty list to hold JSON data
         json_data = []
         
-        # Loop through query results and add them to the json_data list
         for result in results:
-            json_data.append(result)  # Each result is already a dictionary
+            json_data.append(result)
         
         return json_data
 
