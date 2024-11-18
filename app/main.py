@@ -1,21 +1,11 @@
 #!/usr/bin/python3
-import mysql.connector
-from mysql.connector import Error
-
 from fastapi import FastAPI
 from typing import Optional
 from pydantic import BaseModel
+import mysql.connector
+from mysql.connector import Error
 import json
 import os
-
-app = FastAPI()
-from fastapi.middleware.cors import CORSMiddleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
 
 
 DBHOST = "ds2022.cqee4iwdcaph.us-east-1.rds.amazonaws.com"
@@ -27,8 +17,20 @@ db = mysql.connector.connect(user=DBUSER, host=DBHOST, password=DBPASS, database
 cur=db.cursor()
 
 
+app = FastAPI()
+
+from fastapi.middleware.cors import CORSMiddleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+
 @app.get("/")
-def read_root():
+def zone_apex():
     return {"message": "Welcome to the API!"}
 
 
@@ -55,11 +57,11 @@ def get_songs():
         songs.album,
         songs.artist,
         songs.year,
-        songs.file AS song_file,
-        songs.image AS song_image,
-        genres.genre AS genre
+        songs.file,
+        songs.image,
+        genres.genre
     FROM songs
-    JOIN genres ON songs.genre = genres.genreid
+    JOIN genres WHERE songs.genre = genres.genreid
     ORDER BY songs.id;
     """
 
