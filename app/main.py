@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from fastapi import FastAPI
-from typing import Optional
-from pydantic import BaseModel
+# from typing import Optional
+# from pydantic import BaseModel
 import mysql.connector
 from mysql.connector import Error
 import json
@@ -36,6 +36,8 @@ def zone_apex():
 
 @app.get('/genres')
 def get_genres():
+    db = mysql.connector.connect(user=DBUSER, host=DBHOST, password=DBPASS, database=DB)
+    cur = db.cursor()
     query = "SELECT * FROM genres ORDER BY genreid;"
     try:    
         cur.execute(query)
@@ -51,6 +53,8 @@ def get_genres():
 
 @app.get("/songs")
 def get_songs():
+    db = mysql.connector.connect(user=DBUSER, host=DBHOST, password=DBPASS, database=DB)
+    cur=db.cursor()
     query = """
     SELECT
         songs.title,
